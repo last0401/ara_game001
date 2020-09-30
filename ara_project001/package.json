@@ -3,7 +3,7 @@
     "main": "index.html",
     "chromium-args": "--force-color-profile=srgb",
     "window": {
-        "title": "女悪魔生存シミュレーション",
+        "title": "ＶＩＥＮＮＥＴＴＡ－ヴィエネッタ－",
         "width": 1138,
         "height": 640,
         "position": "center",

@@ -4,8 +4,8 @@
  * @author manapia
  *
  * @help
- * StandingPictureMan v1.1.0
- * Released at 2020.9.17
+ * StandingPictureMan v1.1.3
+ * Released at 2020.9.21
  *
  * @param patterns
  * @text Patterns
@@ -18,8 +18,8 @@
  * @author manapia
  *
  * @help
- * StandingPictureMan v1.1.0
- * Released at 2020.9.17
+ * StandingPictureMan v1.1.3
+ * Released at 2020.9.21
  *
  * @param patterns
  * @text パターン
@@ -38,6 +38,7 @@
  * @text Condition
  * @desc Condition of using this setting.
  * @type struct<StandingPicturePatternCondition>[]
+ * @default []
  *
  * @param picture
  * @text Standing Picture
@@ -86,6 +87,7 @@
  * @text 条件
  * @desc この設定が使用される条件
  * @type struct<StandingPicturePatternCondition>[]
+ * @default []
  *
  * @param picture
  * @text 立ち絵
@@ -324,7 +326,7 @@
      */
     compare(value) {
       if (this.isEqual != null) {
-        return value !== this.isEqual;
+        return value === this.isEqual;
       }
       if (this.gte != null) {
         return value >= this.gte;
@@ -406,24 +408,28 @@
   _initializeSpecifiedStates();
 
   BattleManager.startBattle = function () {
-    _BattleManager_startBattle.apply(this, arguments);
+    const superResult = _BattleManager_startBattle.apply(this, arguments);
     inBattle = true;
     updateBattleMembers();
     updateStandingPictures();
+    return superResult;
   }
 
   BattleManager.endBattle = function () {
-    _BattleManager_endBattle.apply(this, arguments);
+    const superResult = _BattleManager_endBattle.apply(this, arguments);
     inBattle = false;
     eraseAllStandingPictures();
+    return superResult;
   }
 
   BattleManager.updateEventMain = function () {
-    _BattleManager_updateEventMain.apply(this, arguments);
+    const superResult = _BattleManager_updateEventMain.apply(this, arguments);
     if (!inBattle) {
-      return;
+      return superResult;
     }
+
     updateStandingPictures();
+    return superResult;
   }
 
   /**
@@ -512,7 +518,7 @@
       }
       lastPattern = pattern;
 
-      if (pattern.conditions.some((condition) => condition.evaluate())) {
+      if (pattern.conditions.length === 0 || pattern.conditions.every((c) => c.evaluate())) {
         _applyPatternToActor(actorId, pattern);
         return;
       }
